@@ -1,0 +1,47 @@
+#server port
+server:
+    port: 8761
+    
+# Application Name
+spring:
+   application:
+      name: serviceregistry
+      
+   # Security Config
+   #security:
+     # http basic authentication
+    # basic:
+     #  enabled: true
+     # account info
+     #user:
+      # name: admin
+       #password: admin123
+           
+#Discovery Server Access   
+eureka:
+    instance:
+        hostname: localhost
+        preferIpAddress : true
+   #   instance-id: ${eureka.instance.ip-address}:${server.port}
+    client:
+        fetch-registry: false  # not to search for other registry nodes to connect to, as there are none (at least not while running locally )
+        register-with-eureka: false # Eureka client is instructed not to register itself upon start up
+        serviceUrl:
+            defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+            
+# logging:
+#   logstash:
+#     application: serviceregistry
+#     servers: logstash:5000
+    
+#Actuator End Points
+# management:
+#     endpoints:
+#         web:
+#             exposure:
+#                 include: '*'
+
+# logstash:
+#   name: serviceregistry
+#   destination: genie:5000
+#   loglevel: all

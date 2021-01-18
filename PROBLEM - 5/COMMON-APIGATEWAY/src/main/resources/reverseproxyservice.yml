@@ -1,0 +1,66 @@
+# zuul:
+#   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Max-Age, Access-Control-Allow-Headers
+#   sensitive-headers: Cookie, Set-Cookie
+#   routes:
+#     authenticationserver:
+#       service-id: AUTHSERVER
+#       path: /authserver/**       
+#     acsctrl:
+#       service-id: ACSCTRL
+#       path: /acsctrl/**
+#     activity:
+#       service-id: ACTIVITY
+#       path: /activity/**
+#     favourites:
+#       service-id: FAVOURITES
+#       path: /favourites/**
+#     notification:
+#       service-id: NOTIFICATION
+#       path: /notification/**
+#     recentitems:
+#       service-id: RECENTITEMS
+#       path: /recentitems/**
+#     kibana:
+#       path: /kibana/**
+#       url: http://genie:5601/       
+#     authorize:
+#       service-id: AUTHORIZE
+#       path: /authorize/**
+#     search:
+#       service-id: SEARCH
+#       path: /search/**
+#     configserver:
+#       service-id: CONFIGSERVER
+#       path: /configserver/**
+#     serviceregistry:
+#       service-id: SERVICEREGISTRY
+#       path: /serviceregistry/**
+#     vault-client:
+#       path: /app/vault/**
+#       url: http://genie:9102/
+#     rms-client:
+#       path: /app/rms/**
+#       url: http://genie:9103/
+#     ims-client:
+#       path: /app/ims/**
+#       url: http://genie:9104/
+#     stalk-client:  
+#       path: /app/stalk/**
+#       url: http://genie:9105/
+#     stalk-server:  
+#       service-id: STALK
+#       url: /stalk/**
+# 
+# hystrix:
+#   command:
+#     default:
+#       execution:
+#         timeout:
+#           enabled: false
+# ribbon:
+#   ReadTimeout: 10000000
+#   ConnectTimeout: 10000000
+# multipart:
+#   max-file-size: 100Mb
+#   max-request-size: 100Mb
+#   enabled: true

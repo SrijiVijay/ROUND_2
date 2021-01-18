@@ -1,0 +1,37 @@
+#Conventional Server port
+# server:
+#    port: 8081
+# security:
+#    basic:
+#       enabled: false
+#    user:
+#       name: bagus
+#       password: bagus
+#       
+# spring:
+#    cloud:
+#       config: # Configuration service URI Path
+#          retry:
+#             max-attempts: 2
+#             max-interval: 1000
+#          server:
+#             git: # Git repo location.
+#                uri: http://gitlab.kgisl.com/NSURE_POS_v2.0/COMMON-CONFIGURATION.git
+#                username: sriji.n
+#                password: Yuktha@2020
+#                search-paths:
+#                - 'CONFIG*'
+#                repos:  # Alternative Repo Information
+#                   perf:
+#                      pattern:
+#                      - /*configuration2
+#                      uri: https://github.com/SrijiVijay/COMMON-CONFIGURATION2.git
+#                      username: SrijiVijay
+#                      password: Sriji@2020
+# 
+#Actuator End Points
+# management:
+#    endpoints:
+#       web:
+#          exposure:
+#             include: '*'

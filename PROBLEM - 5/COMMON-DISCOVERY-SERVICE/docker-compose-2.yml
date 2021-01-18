@@ -1,0 +1,230 @@
+version: '2.3'
+services:
+    redis:
+        image: ${registry}redis
+        container_name: redis
+        ports:
+            - 6379:6379
+        mem_limit: 1g
+    elasticsearch:
+        image: nexus.kgfsl.com:8084/elasticsearch
+        container_name: elasticsearch
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        mem_limit: 1g
+    kibana:
+        image: ${registry}kibana
+        container_name: kibana
+        ports:
+            - "5601:5601"
+        links:
+            - "elasticsearch:elasticsearch"
+        depends_on:
+            - elasticsearch
+        mem_limit: 1g
+    logstash:
+        image: ${registry}logstash
+        container_name: logstash
+        command: ["/usr/share/logstash/bin/logstash", 
+                  '-e input { tcp { port=>5000 codec=>"json" }} output { elasticsearch { hosts=>["elasticsearch"] index=>"rms"}}']
+        ports: 
+            - "5000:5000"
+        depends_on:
+            - elasticsearch
+        mem_limit: 1g
+    kafka:
+        image: ${registry}kafka:latest-SNAPSHOT
+        container_name: kafka
+        ports:
+            - 9092:9092
+            - 2181:2181
+        command: ./kafka-start.sh ${hostname}
+        mem_limit: 1g
+    configserver:
+        image:  ${registry}configserver:latest-SNAPSHOT
+        container_name: configserver
+        ports:
+            - 9000:9000
+        networks:
+            - default-net
+            - default
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9000"]
+            interval: 10s
+            timeout: 10s
+            retries: 1
+        environment:
+            config.server.git.uri : 'http://gitlab.kgfsl.com/genie/configuration.git'
+            spring.profiles.active : local
+        mem_limit: 1g
+    serviceregistry:
+        image:  ${registry}serviceregistry:latest-SNAPSHOT
+        container_name: serviceregistry
+        ports:
+            - 8761:8761
+        networks:
+            - default-net
+            - default
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:8761"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - configserver
+        links:
+            - configserver
+        mem_limit: 1g
+    reverseproxy:
+        image: ${registry}reverseproxy:latest-SNAPSHOT
+        container_name: reverseproxy
+        networks:
+            - default-net
+            - default
+        ports:
+            - 8080:8080
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:8080"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - serviceregistry
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    authserver:
+        image: ${registry}authserver:latest-SNAPSHOT
+        container_name: authserver
+        networks:
+            - default-net
+            - default
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9001"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - reverseproxy
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    activity:
+        image: ${registry}activity:latest-SNAPSHOT
+        container_name: activity
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9005"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - reverseproxy
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    recentitems:
+        image: ${registry}genie-recentitems:latest-SNAPSHOT
+        container_name: recentitems
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9007"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - reverseproxy
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    search:
+        image: ${registry}genie-search:latest-SNAPSHOT
+        container_name: search
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9006"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - reverseproxy
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    authorize:
+        image: ${registry}genie-authorize:latest-SNAPSHOT
+        container_name: authorize
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9009"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - reverseproxy
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    favourites:
+        image: ${registry}favourites:latest-SNAPSHOT
+        container_name: favourites
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9008"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - reverseproxy
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    notification:
+        image: ${registry}genie-notification:latest-SNAPSHOT
+        container_name: notification
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9010"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - reverseproxy
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    accesscontrol:
+        image: ${registry}accesscontrol:latest-SNAPSHOT
+        container_name: accesscontrol
+        healthcheck:
+            test: ["CMD", "ping", "-c","1", "localhost:9010"]
+            interval: 10s
+            timeout: 10s
+            retries: 3
+        depends_on:
+            - reverseproxy
+        links:
+            - configserver
+        mem_limit: 1g
+        environment:
+            spring.profiles.active : ${activeProfile}
+    acsctrl-client:
+        image: nexus.kgfsl.com:8084/accesscontrol-client:latest
+        container_name: accesscontrol-client
+        ports:
+            - 9102:9102
+        mem_limit: 1g
+networks:
+  default-net:
+    driver: bridge

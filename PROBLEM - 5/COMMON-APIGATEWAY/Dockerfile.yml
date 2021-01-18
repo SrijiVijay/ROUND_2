@@ -1,0 +1,16 @@
+FROM java:8
+ADD /target/COMMON-APIGATEWAY-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8085
+ENV JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n"
+RUN sh -c 'touch /app.jar'
+RUN chmod 777 /app.jar
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=dev -jar /app.jar" ]
+
+# FROM java:8
+# ADD /target/COMMON-APIGATEWAY-0.0.1-SNAPSHOT.jar app.jar
+# RUN sh -c 'touch /app.jar'
+# RUN chmod 777 /app.jar
+# ADD wait-for-it.sh wait-for-it.sh
+# RUN ["chmod", "+x", "/wait-for-it.sh"]
+# ENTRYPOINT ["/bin/bash"\,"/wait-for-it.sh"]
+#ENTRYPOINT ["./wait-for-it.sh", "configserver:8888", "--", "java", "-jar", "app.jar"]

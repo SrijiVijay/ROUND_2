@@ -1,0 +1,12 @@
+FROM java:8
+ADD /target/COMMON-DISCOVERY-SERVICE-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8761
+RUN sh -c 'touch /app.jar'
+RUN chmod 777 /app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
+ 
+# RUN sh -c 'touch /app.jar'
+# RUN chmod 777 /app.jar
+# ADD wait-for-it.sh wait-for-it.sh
+# RUN ["chmod", "+x", "/wait-for-it.sh"]
+# ENTRYPOINT ["/bin/bash"\,"/wait-for-it.sh"]

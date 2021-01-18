@@ -1,0 +1,42 @@
+# Server port
+server:
+   port: 8085
+   
+#Enabling config server
+spring:
+   application:
+      name: reverseproxy
+   profiles: # Spring Profile DEV, QA, PROD 
+      active: dev
+   cloud:
+      config:
+         enabled: true
+         uri: http://localhost:8888   
+         #uri: http://configserver:8888
+         fail-fast: true
+         retry:
+            max-attempts: 5
+            initial-interval: 5000
+            multiplier: 1.5
+eureka:
+   instance:
+      prefer-ip-address: true
+   client:
+      registerWithEureka: true
+      fetchRegistry: true
+      serviceUrl:
+          #defaultZone: http://admin:admin123@serviceregistry:8761/eureka
+          #defaultZone: http://admin:admin123@localhost:8761/eureka
+          defaultZone: http://localhost:8761/eureka
+      
+# Actuator End Points
+# management:
+#     endpoints:
+#         web:
+#             exposure:
+#                 include: '*'
+                     
+#       config:
+#          discovery:
+#             enabled: true
+#             service-id: configserver 

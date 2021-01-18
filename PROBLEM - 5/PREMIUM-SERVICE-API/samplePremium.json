@@ -1,0 +1,16 @@
+http://localhost:8085/premiumservice/calculatePremium
+	{
+	"gender": "Female",
+	"name": "Sriji",
+	"age": "58",
+	"hypertension": "yes",
+	"bloodPressure": "no",
+	"bloodSugar": "no",
+	"overWeight": "no",
+	"smoking": "no",
+	"alcohol": "no",
+	"dailyExercise": "no",
+	"drugs": "no"
+	}
+	
+----------------------------------------------

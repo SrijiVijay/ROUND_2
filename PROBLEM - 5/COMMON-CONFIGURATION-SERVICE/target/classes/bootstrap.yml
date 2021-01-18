@@ -1,0 +1,55 @@
+#Conventional Server port
+server:
+   port: 8888
+      
+# Application Name , Profile
+spring:
+   application:
+      name: configserver
+   profiles: # Spring Profile DEV, QA, PROD
+      active: dev
+   cloud:
+      config: # Configuration service URI Path
+         retry:
+            max-attempts: 3
+            max-interval: 1000
+         server:
+            git: # Git repo location.
+               uri: https://github.com/SrijiVijay/COMMON-CONFIGURATION.git
+               fail-fast: true
+               username: SrijiVijay
+               password: Sriji@2019
+               searchPaths: CONFIGG
+               force-pull: true
+#                search-paths:
+#                      - '*CONFIG*'
+#                repos:  # Alternative Repo Information
+#                   perf:
+#                      pattern:
+#                      - /*configuration2
+#                      uri: https://github.com/SrijiVijay/COMMON-CONFIGURATION2.git
+#                      username: SrijiVijay
+#                      password: Sriji@2020
+
+# Service Registry Discovery
+eureka:
+   instance:
+      prefer-ip-address: true
+   client:
+      registerWithEureka: true
+      fetchRegistry: true
+      serviceUrl:
+         #defaultZone: http://serviceregistry:8761/eureka
+         defaultZone: http://localhost:8761/eureka
+         #defaultZone: http://admin:admin123@localhost:8761/eureka
+         
+#Actuator End Points
+# management:
+#    endpoints:
+#       web:
+#          exposure:
+#             include: '*'
+            
+service:
+   Instance:
+      name: Instance1

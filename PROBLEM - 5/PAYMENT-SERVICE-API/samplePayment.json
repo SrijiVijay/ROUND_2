@@ -1,0 +1,23 @@
+http://localhost:8080/payment/
+{
+	"client": {
+		"id": "123456788"
+	},
+	"buyer": {
+		"name": "Sriji N",
+		"email": "sriji.n@kgisl.com",
+		"cpf": "46434925034"
+	},
+	"amount": 1000,
+	"type": "CREDIT_CARD",
+	"creditCard": {
+		"holderName": "Sriji Nagarajan",
+		"number": "5131778903563981",
+		"expirationDate": "2022-09",
+		"cvv": "123"
+	}
+}
+----------------------------------------------------
+http://localhost:8080/payment/5ff1fc6898538c6c54779c90/status
+
+

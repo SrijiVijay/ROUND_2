@@ -1,0 +1,12 @@
+FROM java:8
+ADD /target/COMMON-DISCOVERY-SERVICE-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8761
+RUN sh -c 'touch /app.jar'
+RUN chmod 777 /app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
+
+# FROM mongo:latest
+# ENV MONGO_INITDB_ROOT_USERNAME devadmin
+# ENV MONGO_INITDB_ROOT_PASSWORD devadmin
+# ENV MONGO_INITDB_DATABASE BAGUS
+# COPY mongo-init.js /docker-entrypoint-initdb.d/
